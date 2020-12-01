@@ -11,3 +11,21 @@ export const generateToken = (user) => {
         expiresIn: '30d',
     });
 };
+
+//Check middleware 
+export const isAuth = (req, res, next) => {
+    const authorization = req.headers.authorization;
+    if (authorization) {
+        const token = authorization.slice(7, authorization.length); //Bearer XXX
+        jwt.verify(token, process.env.JWT_SECRET || 'namdepzai', (err, decode) => {
+            if (err) {
+                res.status(401).send({ message: 'Invalid token' });
+            } else {
+                req.user = decode;
+                next();
+            }
+        })
+    } else {
+        res.status(401).send({ message: 'No token' });
+    }
+}

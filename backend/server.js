@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRouter from './routers/UserRouter.js';
 import productRouter from './routers/productRouter.js';
+import orderRouter from './routers/orderRouter.js';
 
 dotenv.config();
 
@@ -25,6 +26,8 @@ mongoose.connect(connectURL, { useNewUrlParser: true, useUnifiedTopology: true, 
 app.use('/api/users', userRouter);
 
 app.use('/api/products', productRouter);
+
+app.use('/api/orders', orderRouter);
 
 app.get('/', (req, res) => {
     res.send('Nam dep zai');
