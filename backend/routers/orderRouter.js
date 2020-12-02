@@ -1,7 +1,7 @@
-const express = require('express');
-const expressAsyncHandler = require('express-async-handler');
-const Order = require('../models/orderModel');
-const { isAuth } = require('../untils');
+import express from 'express'
+import expressAsyncHandler from 'express-async-handler';
+import Order from '../models/orderModel.js';
+import { isAuth } from '../untils.js';
 
 const orderRouter = express.Router();
 
@@ -24,4 +24,19 @@ orderRouter.post('/', isAuth, expressAsyncHandler(async (req, res) => {
     }
 }))
 
-module.exports = orderRouter;
+//Get all order
+orderRouter.get('/', async (req, res) => {
+    const orders = await Order.find({});
+    res.status(200).send(orders);
+})
+
+//Order details
+orderRouter.get('/:id', isAuth, expressAsyncHandler(async (req, res) => {
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+        return res.status(404).send({ message: 'Khong tim thay order ' });
+    }
+    res.status(200).send(order);
+}))
+
+export default orderRouter;
